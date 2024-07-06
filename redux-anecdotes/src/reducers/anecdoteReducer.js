@@ -27,7 +27,7 @@ const addAnecdote = (text) => {
   return { type: 'ADD', text}
 }
 
-const reducer = (state = initialState, action) => {
+const anectReducer = (state = initialState, action) => {
   switch(action.type) {
     case 'ADD':
       return [...state, {
@@ -56,4 +56,4 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-export { reducer, createVote, addAnecdote }
+export { anectReducer, createVote, addAnecdote }
