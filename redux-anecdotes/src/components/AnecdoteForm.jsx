@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { addAnecdote } from '../reducers/anecdoteReducer'
+import { addAction } from '../reducers/anecdoteReducer'
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch()
@@ -7,7 +7,7 @@ const AnecdoteForm = () => {
     const submit = (ev) => {
         ev.preventDefault();
     
-        dispatch(addAnecdote(ev.target.text.value));
+        dispatch(addAction(ev.target.text.value));
     }
     return (<>
         <h2>create new</h2>

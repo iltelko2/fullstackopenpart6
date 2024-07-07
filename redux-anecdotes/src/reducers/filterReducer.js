@@ -1,17 +1,18 @@
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = { filterText: '' }
+  
+const filterSlice = createSlice({
+    name: 'filter',
+    initialState,
+    reducers: {
+            // eslint-disable-next-line no-unused-vars
+            filterAction(state = initialState, action) {
+                return { filterText: action.payload }
+            }
+        }        
+    },
+  )
 
-const createFilter = (filterText) => {
-    return { type: "SET_FILTER", filterText }
-}
-
-const filterReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case "SET_FILTER":
-            return { filterText: action.filterText }
-        default:
-            return state;
-    }
-}
-
-export { filterReducer, createFilter }
+  export const { filterAction } = filterSlice.actions
+  export default filterSlice.reducer;
