@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux'
-import { addNewAction } from '../reducers/anecdoteReducer'
-import { notificationAction, deleteAction } from '../reducers/notificationReducer'
-import anecdotesService from '../services/anecdotes';
+import { addNew } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch()
@@ -9,12 +8,9 @@ const AnecdoteForm = () => {
     const submit = async (ev) => {
         ev.preventDefault();
 
-        const newObj = await anecdotesService.createNew(ev.target.text.value);
-        
-        dispatch(addNewAction(newObj));
+        dispatch(addNew(ev.target.text.value));
 
-        dispatch(notificationAction('You added ' + ev.target.text.value));
-        setTimeout(() => dispatch(deleteAction('')), 5000)
+        dispatch(setNotification('You added ' + ev.target.text.value, 5));
     }
     return (<>
         <h2>create new</h2>

@@ -19,4 +19,12 @@ const notiSlice = createSlice({
   )
 
   export const { notificationAction, deleteAction } = notiSlice.actions
+
+  export const setNotification = (text, time) => {
+    return async dispatch => {
+        dispatch(notificationAction(text));
+        setTimeout(() => dispatch(deleteAction('')), time*1000)
+      }
+  }
+
   export default notiSlice.reducer;
