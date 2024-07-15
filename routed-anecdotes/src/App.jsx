@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react'
 import {
-  BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route, Link, useMatch, useNavigate
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -17,11 +17,20 @@ const Menu = () => {
   )
 }
 
+const Anecdote = ({ anecdote }) => (
+  <div>
+    <h3>{anecdote.content}</h3>
+  </div>
+)
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => <li key={anecdote.id} >
+        <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+
+      </li>)}
     </ul>
   </div>
 )
@@ -52,7 +61,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -62,6 +71,13 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+
+    props.setNotification('New added: ' + content)
+    setTimeout(() => {
+      props.setNotification('');
+    }, 3000);
+
+    navigate('/')
   }
 
   return (
@@ -104,6 +120,10 @@ const App = () => {
       id: 2
     }
   ])
+  const match = useMatch('/anecdotes/:id')
+  const anecdote = match 
+    ? anecdotes.find(anecdote => anecdote.id === Number(match.params.id))
+    : null
 
   const [notification, setNotification] = useState('')
 
@@ -127,21 +147,23 @@ const App = () => {
   }
 
   return (
-    <Router>
       <div>
         <h1>Software anecdotes</h1>
 
+        {notification.length > 0 &&
+          (<p>{notification}</p>)
+        }
         <Menu />
         
         <Routes>
           <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
-          <Route path="/create" element={<CreateNew addNew={addNew} />} />
+          <Route path="/create" element={<CreateNew addNew={addNew} setNotification={setNotification} />} />
           <Route path="/about" element={<About />} />
+          <Route path="/anecdotes/:id" element={<Anecdote anecdote={anecdote} />} />
         </Routes>
 
         <Footer />
       </div>
-    </Router>
   )
 }
 
