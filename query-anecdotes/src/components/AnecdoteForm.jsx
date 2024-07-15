@@ -9,20 +9,30 @@ const AnecdoteForm = () => {
 
 
   const newMutation = useMutation({ mutationFn: (nw) => axios.post('http://localhost:3001/anecdotes', nw).then(res => res.data), 
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
-  },},)
+  onSuccess: (succ) => {
+    queryClient.invalidateQueries({ queryKey: ['anecdotes'] });
 
-  
+    nDispatch({type:'ADD', payload: 'You added ' + succ.content });
+    setTimeout(() => {  nDispatch({type:'EMPTY'}); }, 5000)
+
+  },
+  onError: (err, ...rest) => {
+    console.log(err.response.data.error)
+
+    nDispatch({type:'ADD', payload: err.response.data.error });
+    setTimeout(() => {  nDispatch({type:'EMPTY'}); }, 5000)
+
+  }
+
+
+},)
+
+
   const onCreate = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
 
     newMutation.mutate({content, votes:0})
-
-
-    nDispatch({type:'ADD', payload: 'You added ' + content });
-    setTimeout(() => {  nDispatch({type:'EMPTY'}); }, 5000)
 
     event.target.anecdote.value = ''
     console.log('new anecdote')
